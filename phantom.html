@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phantom wallet</title>
+  </head>
+  <body>
+    <script>
+      async function connect() {
+        const getProvider = () => {
+          if ("phantom" in window) {
+            const provider = window.phantom?.solana;
+
+            if (provider?.isPhantom) {
+              return provider;
+            }
+          }
+
+          window.open("https://phantom.app/", "_blank");
+        };
+        const provider = getProvider(); // see "Detecting the Provider"
+        try {
+          const resp = await provider.request({ method: "connect" });
+          console.log(resp.publicKey.toString());
+          // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo
+        } catch (err) {
+          // { code: 4001, message: 'User rejected the request.' }
+        }
+      }
+    </script>
+    <button onclick="connect()">Connect</button>
+  </body>
+</html>
